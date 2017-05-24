@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Random words</title>
+<style>
+    td {
+        background-color: wheat;
+        padding: 5px;
+        width: 150px;
+    }
+</style>
+</head>
+<body>
+<table id="main"></table>
+<button id="regenerate">Ещё таблицу!</button>
+<script>
+fetch('word_rus.txt').then(response => response.text()).then(text => {
+    var words = text.split('\n');
+ 
+    function generate() {
+        for (let i = words.length; i; i--) {
+            let j = Math.floor(Math.random() * i);
+            [words[i - 1], words[j]] = [words[j], words[i - 1]];
+        }
+        let words_to_display = words.slice(0, 16);
+
+        for (let i = 0; i < 16; i+=4) {
+            let row = document.createElement('tr');
+            document.getElementById('main').appendChild(row)
+            for (let j = 0; j < 4; j++) {
+                let cell = document.createElement('td');
+                cell.appendChild(document.createTextNode(words_to_display[i + j]));
+                row.appendChild(cell)
+            }
+        }
+    }
+
+    function regenerate() {
+        var myNode = document.getElementById('main');
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.firstChild);
+        }
+        generate();
+    }
+
+    document.getElementById('regenerate').addEventListener('click', regenerate);
+    generate();
+})
+</script>
+</body>
+</html
